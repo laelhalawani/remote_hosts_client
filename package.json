@@ -1,10 +1,10 @@
 {
-  "name": "terminal-control-mcp-client",
+  "name": "remote-hosts-mcp-client",
   "version": "1.0.0",
-  "description": "MCP client for Remote Terminal Control Server - works with Claude Desktop",
+  "description": "MCP client for Remote Hosts Server - works with Claude Desktop",
   "main": "index.js",
   "bin": {
-    "terminal-control-mcp": "./index.js"
+    "remote-hosts-mcp": "./index.js"
   },
   "scripts": {
     "start": "node index.js"

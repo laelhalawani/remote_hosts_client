@@ -1,6 +1,6 @@
-# Terminal Control MCP Client
+# Remote Hosts MCP Client
 
-Node.js MCP client for the Remote Terminal Control Server. Works with Claude Desktop, Cursor, and other MCP-compatible AI tools.
+Node.js MCP client for the Remote Hosts Server. Works with Claude Desktop, Cursor, and other MCP-compatible AI tools.
 
 ## Installation
 
@@ -17,13 +17,13 @@ Add this to your Claude Desktop config file:
 ```json
 {
   "mcpServers": {
-    "terminal-control": {
+    "remote-hosts": {
       "command": "npx",
       "args": [
         "-y",
-        "github:laelhalawani/terminal-control-mcp-client",
+        "github:laelhalawani/remote_hosts_client",
         "--api-base",
-        "https://localhost"
+        "https://localhost:8443"
       ]
     }
   }
@@ -62,9 +62,9 @@ If your Terminal Control Server is running on a different machine:
   "command": "npx",
   "args": [
     "-y",
-    "github:laelhalawani/terminal-control-mcp-client",
+    "github:laelhalawani/remote_hosts_client",
     "--api-base",
-    "https://192.168.1.100"
+    "https://192.168.1.100:8443"
   ]
 }
 ```
@@ -73,10 +73,10 @@ If your Terminal Control Server is running on a different machine:
 
 ```bash
 # Clone and test
-git clone https://github.com/laelhalawani/terminal-control-mcp-client
-cd terminal-control-mcp-client
+git clone https://github.com/laelhalawani/remote_hosts_client
+cd remote_hosts_client
 npm install
-node index.js --api-base https://localhost
+node index.js --api-base https://localhost:8443
 ```
 
 ## How It Works

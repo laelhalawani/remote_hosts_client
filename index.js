@@ -63,7 +63,7 @@ let activeTerminal = {
 // Create MCP server
 const server = new Server(
   {
-    name: "terminal-control-mcp-client",
+    name: "remote-hosts-mcp-client",
     version: "1.0.0",
   },
   {
@@ -460,7 +460,7 @@ async function main() {
   const transport = new StdioServerTransport();
   await server.connect(transport);
   console.error(
-    `Terminal Control MCP Client running (API: ${API_BASE})`
+    `Remote Hosts MCP Client running (API: ${API_BASE})`
   );
 }
 
