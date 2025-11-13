@@ -20,7 +20,7 @@
   "author": "Lael Halawani",
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.10.2",
+    "@modelcontextprotocol/sdk": "~1.10.2",
     "axios": "^1.6.0",
     "yargs": "^17.7.2"
   },
