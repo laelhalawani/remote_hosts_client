@@ -1,15 +1,12 @@
 #!/usr/bin/env node
 
-const { Server } = require("@modelcontextprotocol/sdk/server/index.js");
-const { StdioServerTransport } = require("@modelcontextprotocol/sdk/server/stdio.js");
-const {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} = require("@modelcontextprotocol/sdk/types.js");
-const axios = require("axios");
-const yargs = require("yargs/yargs");
-const { hideBin } = require("yargs/helpers");
-const https = require("https");
+import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
+import axios from "axios";
+import yargs from "yargs/yargs";
+import { hideBin } from "yargs/helpers";
+import https from "https";
 
 // Parse command line arguments
 const argv = yargs(hideBin(process.argv))
@@ -69,6 +66,7 @@ const server = new Server(
   {
     capabilities: {
       tools: {},
+      logging: {},
     },
   }
 );
