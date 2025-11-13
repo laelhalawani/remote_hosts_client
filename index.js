@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 
+// Immediate startup logging to verify execution
+console.error("=== remote-hosts-mcp-client starting ===");
+console.error("Node version:", process.version);
+console.error("Arguments:", process.argv);
+
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -12,13 +17,17 @@ import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import https from "https";
 
+console.error("=== All imports completed successfully ===");
+
 // Basic top-level error logging so Claude can surface failures
 process.on("uncaughtException", (err) => {
   console.error("Uncaught exception in remote-hosts-mcp-client:", err);
+  process.exit(1);
 });
 
 process.on("unhandledRejection", (reason) => {
   console.error("Unhandled rejection in remote-hosts-mcp-client:", reason);
+  process.exit(1);
 });
 
 // Parse command line arguments
@@ -502,13 +511,16 @@ async function readFromSession(hostName, sessionName) {
 
 // Start the server
 async function main() {
+  console.error("=== main() function called, creating transport ===");
   const transport = new StdioServerTransport();
+  console.error("=== transport created, connecting server ===");
   await server.connect(transport);
   console.error(
     `Remote Hosts MCP Client running (API: ${API_BASE})`
   );
 }
 
+console.error("=== About to call main() ===");
 main().catch((error) => {
   console.error("Server error:", error);
   process.exit(1);
