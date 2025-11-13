@@ -21,10 +21,15 @@ Add this to your Claude Desktop config file:
       "command": "npx",
       "args": [
         "-y",
-        "github:laelhalawani/remote_hosts_client",
+        "--package",
+        "https://github.com/laelhalawani/remote_hosts_client",
+        "remote-hosts-mcp",
         "--api-base",
         "https://localhost:8443"
-      ]
+      ],
+      "env": {
+        "NODE_TLS_REJECT_UNAUTHORIZED": "0"
+      }
     }
   }
 }
@@ -35,7 +40,7 @@ Add this to your Claude Desktop config file:
 ## Requirements
 
 - Node.js 18+ installed
-- Remote Terminal Control Server running on `https://localhost` (or specify different URL with `--api-base`)
+- Remote Hosts Server running on `https://localhost:8443` (or specify different URL with `--api-base`)
 
 ## Available MCP Tools
 
@@ -55,19 +60,26 @@ Once configured, Claude will have access to these 9 tools:
 
 ### Custom API URL
 
-If your Terminal Control Server is running on a different machine:
+If your Remote Hosts Server is running on a different machine:
 
 ```json
 {
   "command": "npx",
   "args": [
     "-y",
-    "github:laelhalawani/remote_hosts_client",
+    "--package",
+    "https://github.com/laelhalawani/remote_hosts_client",
+    "remote-hosts-mcp",
     "--api-base",
     "https://192.168.1.100:8443"
-  ]
+  ],
+  "env": {
+    "NODE_TLS_REJECT_UNAUTHORIZED": "0"
+  }
 }
 ```
+
+**Note:** The `NODE_TLS_REJECT_UNAUTHORIZED` environment variable disables SSL certificate verification. Only use this for local development with self-signed certificates. For production, use proper SSL certificates.
 
 ## Testing Locally
 
@@ -82,14 +94,18 @@ node index.js --api-base https://localhost:8443
 ## How It Works
 
 This client acts as a bridge between:
-- **MCP protocol** (stdio) ↔ **Terminal Control API** (HTTP)
+- **MCP protocol** (stdio) ↔ **Remote Hosts API** (HTTPS)
 
-It translates MCP tool calls from Claude Desktop into HTTP API requests to your Terminal Control Server.
+It translates MCP tool calls from Claude Desktop into HTTPS API requests to your Remote Hosts Server, allowing Claude to:
+- Manage remote SSH hosts
+- Create and control terminal sessions
+- Execute commands and read output
+- All through a secure, encrypted API connection
 
 ## Related Projects
 
-- **[Remote Terminal Control Server](https://github.com/laelhalawani/remote_hosts_server)** - The main server (keep private if you want)
-- This client can be public - it only contains the MCP interface, no sensitive code
+- **[Remote Hosts Server](https://github.com/laelhalawani/remote_hosts_server)** - The main backend server that manages SSH connections and terminal sessions
+- This client only contains the MCP interface - it's safe to keep public
 
 ## License
 
