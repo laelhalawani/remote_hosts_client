@@ -2,19 +2,32 @@
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
+import {
+  CallToolRequestSchema,
+  ListToolsRequestSchema,
+  InitializeRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
 import axios from "axios";
 import yargs from "yargs/yargs";
 import { hideBin } from "yargs/helpers";
 import https from "https";
+
+// Basic top-level error logging so Claude can surface failures
+process.on("uncaughtException", (err) => {
+  console.error("Uncaught exception in remote-hosts-mcp-client:", err);
+});
+
+process.on("unhandledRejection", (reason) => {
+  console.error("Unhandled rejection in remote-hosts-mcp-client:", reason);
+});
 
 // Parse command line arguments
 const argv = yargs(hideBin(process.argv))
   .option("api-base", {
     alias: "a",
     type: "string",
-    description: "Base URL of the Terminal Control API",
-    default: "https://localhost",
+    description: "Base URL of the Remote Hosts API",
+    default: "https://localhost:8443",
   })
   .help()
   .alias("help", "h").argv;
@@ -57,6 +70,9 @@ let activeTerminal = {
   sessionName: null,
 };
 
+// Supported MCP spec version (we negotiate down from the client version)
+const SUPPORTED_PROTOCOL_VERSION = "2024-11-05";
+
 // Create MCP server
 const server = new Server(
   {
@@ -70,6 +86,37 @@ const server = new Server(
     },
   }
 );
+
+// Explicit initialize handler so we can log and be robust under npx
+server.setRequestHandler(InitializeRequestSchema, async (request) => {
+  console.error(
+    "remote-hosts-mcp-client: received initialize request:",
+    JSON.stringify(request)
+  );
+
+  // In future we could support multiple protocol versions; for now we always
+  // respond with the single version this client is built against.
+  const protocolVersion = SUPPORTED_PROTOCOL_VERSION;
+
+  const result = {
+    protocolVersion,
+    capabilities: {
+      tools: {},
+      logging: {},
+    },
+    serverInfo: {
+      name: "remote-hosts-mcp-client",
+      version: "1.0.0",
+    },
+  };
+
+  console.error(
+    "remote-hosts-mcp-client: sending initialize result:",
+    JSON.stringify(result)
+  );
+
+  return result;
+});
 
 // List available tools
 server.setRequestHandler(ListToolsRequestSchema, async () => {
